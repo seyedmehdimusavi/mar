@@ -1,0 +1,140 @@
+<div class="practice">
+
+  <!-- ── Session Done ─────────────────────────────── -->
+  @if (phase() === 'done') {
+    <div class="done-screen">
+      <div class="done-card">
+        <div class="done-emoji">🎉</div>
+        <h2>Session Complete!</h2>
+        @if (summary(); as s) {
+          <p class="done-headline">{{ avgRatingLabel(s.avgRating) }}</p>
+
+          <div class="done-stats">
+            <div class="done-stat">
+              <span class="done-stat-val">{{ s.results.length }}</span>
+              <span class="done-stat-lbl">Practiced</span>
+            </div>
+            <div class="done-stat">
+              <span class="done-stat-val improved">+{{ s.improved }}</span>
+              <span class="done-stat-lbl">Improved</span>
+            </div>
+            <div class="done-stat">
+              <span class="done-stat-val declined">{{ s.declined }}</span>
+              <span class="done-stat-lbl">Declined</span>
+            </div>
+          </div>
+
+          <div class="result-list">
+            @for (r of s.results; track r.questionId) {
+              <div class="result-item">
+                <span class="r-emoji">{{ ratingEmoji(r.rating) }}</span>
+                <span class="r-question">{{ r.question }}</span>
+                <span class="r-dom" [style.background]="domColor(r.dominanceAfter)">
+                  {{ r.dominanceAfter }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+        <button class="finish-btn" (click)="finishSession()">Back to Home</button>
+      </div>
+    </div>
+  }
+
+  <!-- ── Active Practice ──────────────────────────── -->
+  @if (phase() !== 'done') {
+
+    <!-- Progress Bar -->
+    <div class="progress-header">
+      <div class="progress-track">
+        <div class="progress-fill" [style.width]="progress().pct + '%'"></div>
+      </div>
+      <span class="progress-text">{{ progress().current + 1 }} / {{ progress().total }}</span>
+    </div>
+
+    @if (currentQuestion(); as q) {
+
+      <!-- ── QUESTION PHASE ──────────────────────── -->
+      @if (phase() === 'question') {
+        <div class="card-wrap">
+          <div class="q-card">
+            <div class="q-badge">{{ q.category }}</div>
+            <div class="q-dom-row">
+              <span class="dom-pill" [style.background]="domColor(q.dominance)">
+                Level {{ q.dominance }} · {{ domLabel(q.dominance) }}
+              </span>
+              @if (q.practiceCount > 0) {
+                <span class="tried-badge">Tried {{ q.practiceCount }}×</span>
+              }
+            </div>
+
+            <div class="q-text">{{ q.question }}</div>
+
+            <div class="tts-row">
+              @if (!isSpeaking()) {
+                <button class="tts-btn" (click)="playQuestion()">
+                  <span class="tts-icon">▶</span> Play Question
+                </button>
+              } @else {
+                <button class="tts-btn stop" (click)="stopSpeaking()">
+                  <span class="tts-icon">■</span> Stop
+                </button>
+              }
+            </div>
+          </div>
+
+          <p class="think-hint">Think of your answer, then tap below</p>
+
+          <button class="show-answer-btn" (click)="showAnswer()">
+            Show Answer ▾
+          </button>
+        </div>
+      }
+
+      <!-- ── ANSWER PHASE ───────────────────────── -->
+      @if (phase() === 'answer') {
+        <div class="card-wrap">
+          <div class="q-card mini">
+            <div class="q-text-small">{{ q.question }}</div>
+          </div>
+
+          <div class="a-card">
+            <div class="a-header">
+              <span class="a-label">Possible Answers</span>
+            </div>
+            @for (ans of q.answers; track ans; let i = $index) {
+              <div class="answer-item">
+                <div class="ans-num">{{ i + 1 }}</div>
+                <div class="ans-text">{{ ans }}</div>
+                <button class="play-ans-btn" (click)="playAnswer(ans)" title="Play this answer">▶</button>
+              </div>
+            }
+          </div>
+
+          <div class="eval-section">
+            <p class="eval-prompt">How well did your answer match?</p>
+            <div class="rating-grid">
+              @for (r of ratingLabels; track r.value) {
+                <button class="rating-btn" (click)="submitRating(r.value)"
+                        [style.--rcolor]="r.color">
+                  <span class="r-btn-emoji">{{ r.emoji }}</span>
+                  <span class="r-btn-label">{{ r.label }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Flash result overlay -->
+        @if (showLastResult() && lastResult(); as lr) {
+          <div class="result-flash" [style.background]="domColor(lr.dominanceAfter)">
+            {{ lr.dominanceAfter > lr.dominanceBefore ? '↑' : lr.dominanceAfter < lr.dominanceBefore ? '↓' : '→' }}
+            Level {{ lr.dominanceAfter }} · {{ domLabel(lr.dominanceAfter) }}
+          </div>
+        }
+      }
+
+    }
+  }
+
+</div>

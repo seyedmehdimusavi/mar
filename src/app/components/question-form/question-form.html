@@ -1,0 +1,67 @@
+<div class="form-overlay">
+  <div class="form-sheet">
+
+    <div class="form-header">
+      <h2>{{ question ? 'Edit Question' : 'New Question' }}</h2>
+      <button class="close-btn" (click)="cancel.emit()">✕</button>
+    </div>
+
+    <div class="form-body">
+
+      <!-- Question -->
+      <div class="field">
+        <label class="field-label">Question *</label>
+        <textarea class="field-textarea" rows="3" placeholder="Type the question here…"
+                  [ngModel]="questionText()" (ngModelChange)="questionText.set($event)">
+        </textarea>
+      </div>
+
+      <!-- Category -->
+      <div class="field">
+        <label class="field-label">Category *</label>
+        @if (!useNewCategory()) {
+          <div class="cat-row">
+            <select class="field-select" [ngModel]="category()" (ngModelChange)="category.set($event)">
+              @for (cat of existingCategories(); track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+            <button class="new-cat-btn" (click)="useNewCategory.set(true)">+ New</button>
+          </div>
+        } @else {
+          <div class="cat-row">
+            <input class="field-input" type="text" placeholder="New category name…"
+                   [ngModel]="newCategory()" (ngModelChange)="newCategory.set($event)" />
+            <button class="new-cat-btn secondary" (click)="useNewCategory.set(false)">Existing</button>
+          </div>
+        }
+      </div>
+
+      <!-- Answers -->
+      <div class="field">
+        <label class="field-label">Possible Answers * <span class="field-hint">(at least one)</span></label>
+        @for (ans of answers(); track $index; let i = $index) {
+          <div class="ans-row">
+            <span class="ans-num">{{ i + 1 }}</span>
+            <input class="field-input ans-input" type="text"
+                   [placeholder]="'Answer ' + (i + 1)"
+                   [ngModel]="ans" (ngModelChange)="updateAnswer(i, $event)" />
+            @if (answers().length > 1) {
+              <button class="remove-ans" (click)="removeAnswer(i)">✕</button>
+            }
+          </div>
+        }
+        <button class="add-ans-btn" (click)="addAnswer()">+ Add Another Answer</button>
+      </div>
+
+    </div>
+
+    <div class="form-footer">
+      <button class="cancel-btn" (click)="cancel.emit()">Cancel</button>
+      <button class="save-btn" [disabled]="!isValid" (click)="submit()">
+        {{ question ? 'Save Changes' : 'Add Question' }}
+      </button>
+    </div>
+
+  </div>
+</div>

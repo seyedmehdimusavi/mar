@@ -1,0 +1,89 @@
+<div class="qbank">
+
+  <!-- ── Form Modal ─────────────────────────────── -->
+  @if (showForm()) {
+    <app-question-form
+      [question]="editingQuestion()"
+      [categories]="categories()"
+      (save)="onFormSave($event)"
+      (cancel)="onFormCancel()">
+    </app-question-form>
+  }
+
+  <!-- ── Header ─────────────────────────────────── -->
+  <div class="qbank-header">
+    <div class="header-row">
+      <h1>Question Bank</h1>
+      <button class="add-btn" (click)="openAdd()">+ Add</button>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" type="search" placeholder="Search questions…"
+             [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+    </div>
+  </div>
+
+  <!-- ── Filters ─────────────────────────────────── -->
+  <div class="filters">
+    <div class="filter-scroll">
+      @for (cat of categories(); track cat) {
+        <button class="filter-chip" [class.active]="filterCategory() === cat"
+                (click)="filterCategory.set(cat)">{{ cat }}</button>
+      }
+    </div>
+
+    <div class="sort-row">
+      <span class="sort-label">Sort:</span>
+      <select class="sort-select" [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)">
+        <option value="dominance">Weakest first</option>
+        <option value="lastTried">Least recent</option>
+        <option value="practiceCount">Least practiced</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ── Count ───────────────────────────────────── -->
+  <div class="result-count">{{ filteredQuestions().length }} questions</div>
+
+  <!-- ── List ───────────────────────────────────── -->
+  <div class="q-list">
+    @for (q of filteredQuestions(); track q.id) {
+      <div class="q-item">
+        <div class="q-item-top">
+          <span class="q-cat">{{ q.category }}</span>
+          <span class="q-dom-badge" [style.background]="domColor(q.dominance)">
+            {{ q.dominance }} · {{ domLabel(q.dominance) }}
+          </span>
+        </div>
+        <p class="q-question">{{ q.question }}</p>
+        <div class="q-answers">
+          @for (ans of q.answers; track ans; let i = $index) {
+            <div class="q-ans-item">
+              <span class="ans-bullet">{{ i + 1 }}.</span>
+              <span>{{ ans }}</span>
+            </div>
+          }
+        </div>
+        <div class="q-meta">
+          <span>Practiced: {{ q.practiceCount }}×</span>
+          <span>Last: {{ formatDate(q.lastTried) }}</span>
+        </div>
+        <div class="q-actions">
+          <button class="action-btn edit" (click)="openEdit(q)">Edit</button>
+          <button class="action-btn del" (click)="delete(q)">Delete</button>
+        </div>
+      </div>
+    }
+
+    @if (filteredQuestions().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>No questions found</p>
+        <button class="add-btn-inline" (click)="openAdd()">Add your first question</button>
+      </div>
+    }
+  </div>
+
+</div>

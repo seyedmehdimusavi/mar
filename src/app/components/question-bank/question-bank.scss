@@ -1,0 +1,250 @@
+.qbank {
+  min-height: 100%;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.qbank-header {
+  background: white;
+  padding: 1rem 1rem 0.75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+
+  h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: #111827; }
+}
+
+.add-btn {
+  padding: 0.45rem 0.85rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:active { transform: scale(0.96); }
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f1f5f9;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  .search-icon { font-size: 0.85rem; }
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  color: #1f2937;
+  outline: none;
+  &::placeholder { color: #9ca3af; }
+}
+
+.filters {
+  background: white;
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-scroll {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  padding-right: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.filter-chip {
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 2rem;
+  background: white;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.12s;
+
+  &.active {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+}
+
+.sort-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding-right: 1rem;
+}
+
+.sort-label { font-size: 0.75rem; color: #6b7280; }
+
+.sort-select {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.35rem;
+  font-size: 0.78rem;
+  color: #374151;
+  background: white;
+  outline: none;
+}
+
+.result-count {
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.q-list {
+  flex: 1;
+  padding: 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.q-item {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 0.9rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.q-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.q-cat {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+.q-dom-badge {
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 1rem;
+}
+
+.q-question {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.q-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.q-ans-item {
+  display: flex;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: #4b5563;
+  line-height: 1.4;
+  .ans-bullet { color: #9ca3af; flex-shrink: 0; }
+}
+
+.q-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.q-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.action-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1.5px solid;
+  cursor: pointer;
+  transition: all 0.12s;
+
+  &.edit {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: white;
+    &:active { background: #eff6ff; }
+  }
+
+  &.del {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: white;
+    &:active { background: #fef2f2; }
+  }
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 0.75rem;
+  text-align: center;
+
+  .empty-icon { font-size: 3rem; }
+  p { font-size: 1rem; color: #9ca3af; margin: 0; }
+}
+
+.add-btn-inline {
+  padding: 0.6rem 1.2rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}

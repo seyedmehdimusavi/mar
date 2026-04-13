@@ -1,0 +1,13 @@
+<nav class="bottom-nav">
+  @for (tab of tabs; track tab.path) {
+    <button class="nav-tab" [class.active]="isActive(tab.path)"
+            [class.disabled]="tab.path === '/practice' && !isPracticeActive()"
+            (click)="navigate(tab.path)">
+      <span class="nav-icon">{{ tab.icon }}</span>
+      <span class="nav-label">{{ tab.label }}</span>
+      @if (tab.path === '/practice' && isPracticeActive()) {
+        <span class="nav-dot"></span>
+      }
+    </button>
+  }
+</nav>
