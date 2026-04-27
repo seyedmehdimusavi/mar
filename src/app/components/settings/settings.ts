@@ -1,8 +1,7 @@
-import { Component, OnInit, signal, inject, computed } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuestionService } from '../../services/question.service';
-import { SpeechService } from '../../services/speech.service';
 import { AppSettings } from '../../models/question.model';
 
 @Component({
@@ -12,55 +11,15 @@ import { AppSettings } from '../../models/question.model';
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   private qs = inject(QuestionService);
-  private speech = inject(SpeechService);
 
   settings = signal<AppSettings>({ ...this.qs.settings() });
-  voices = signal<SpeechSynthesisVoice[]>([]);
-  testPlaying = signal(false);
   resetConfirm = signal(false);
-
-  readonly isSpeechSupported = this.speech.isSupported;
-
-  ngOnInit(): void {
-    // Load voices (may need a small delay for some browsers)
-    setTimeout(() => {
-      this.voices.set(this.speech.getVoices());
-    }, 200);
-  }
-
-  updateRate(val: string): void {
-    this.settings.update(s => ({ ...s, rate: +val }));
-    this.save();
-  }
-
-  updatePitch(val: string): void {
-    this.settings.update(s => ({ ...s, pitch: +val }));
-    this.save();
-  }
-
-  updateVolume(val: string): void {
-    this.settings.update(s => ({ ...s, volume: +val }));
-    this.save();
-  }
-
-  updateVoice(uri: string): void {
-    this.settings.update(s => ({ ...s, voiceURI: uri || null }));
-    this.save();
-  }
 
   toggleAutoPlay(field: 'autoPlayQuestion' | 'autoPlayAnswer'): void {
     this.settings.update(s => ({ ...s, [field]: !s[field] }));
     this.save();
-  }
-
-  testSpeech(): void {
-    this.speech.speak("Hello! How are you doing today? I'm practicing my English conversation skills.", this.settings());
-  }
-
-  stopTest(): void {
-    this.speech.stop();
   }
 
   save(): void {
@@ -105,6 +64,4 @@ export class SettingsComponent implements OnInit {
     };
     reader.readAsText(file);
   }
-
-  readonly isSpeaking = this.speech.isSpeaking;
 }

@@ -14,10 +14,6 @@ export interface Category {
 }
 
 export interface AppSettings {
-  voiceURI: string | null;
-  rate: number;   // 0.5–2
-  pitch: number;  // 0–2
-  volume: number; // 0–1
   autoPlayQuestion: boolean;
   autoPlayAnswer: boolean;
 }

@@ -6,73 +6,6 @@
 
   <div class="settings-body">
 
-    <!-- ── Text-to-Speech ─────────────────────── -->
-    <section class="section">
-      <h2 class="section-title">🔊 Text-to-Speech</h2>
-
-      @if (!isSpeechSupported) {
-        <div class="warning-box">
-          ⚠️ Your browser doesn't support Text-to-Speech. Try Chrome or Safari on mobile.
-        </div>
-      }
-
-      <!-- Voice -->
-      <div class="field">
-        <label class="field-label">Voice</label>
-        <select class="field-select" [ngModel]="settings().voiceURI ?? ''"
-                (ngModelChange)="updateVoice($event)">
-          <option value="">Default</option>
-          @for (v of voices(); track v.voiceURI) {
-            <option [value]="v.voiceURI">{{ v.name }} ({{ v.lang }})</option>
-          }
-        </select>
-      </div>
-
-      <!-- Rate -->
-      <div class="field">
-        <div class="field-row">
-          <label class="field-label">Speed</label>
-          <span class="field-val">{{ settings().rate.toFixed(1) }}×</span>
-        </div>
-        <input type="range" class="slider" min="0.5" max="2" step="0.1"
-               [ngModel]="settings().rate" (ngModelChange)="updateRate($event)" />
-        <div class="slider-labels"><span>Slow</span><span>Normal</span><span>Fast</span></div>
-      </div>
-
-      <!-- Pitch -->
-      <div class="field">
-        <div class="field-row">
-          <label class="field-label">Pitch</label>
-          <span class="field-val">{{ settings().pitch.toFixed(1) }}</span>
-        </div>
-        <input type="range" class="slider" min="0.5" max="2" step="0.1"
-               [ngModel]="settings().pitch" (ngModelChange)="updatePitch($event)" />
-        <div class="slider-labels"><span>Low</span><span>Normal</span><span>High</span></div>
-      </div>
-
-      <!-- Volume -->
-      <div class="field">
-        <div class="field-row">
-          <label class="field-label">Volume</label>
-          <span class="field-val">{{ (settings().volume * 100).toFixed(0) }}%</span>
-        </div>
-        <input type="range" class="slider" min="0" max="1" step="0.05"
-               [ngModel]="settings().volume" (ngModelChange)="updateVolume($event)" />
-        <div class="slider-labels"><span>Quiet</span><span>Normal</span><span>Loud</span></div>
-      </div>
-
-      <!-- Test -->
-      <div class="test-row">
-        @if (!isSpeaking()) {
-          <button class="test-btn" (click)="testSpeech()" [disabled]="!isSpeechSupported">
-            ▶ Test Voice
-          </button>
-        } @else {
-          <button class="test-btn stop" (click)="stopTest()">■ Stop</button>
-        }
-      </div>
-    </section>
-
     <!-- ── Auto-Play ──────────────────────────── -->
     <section class="section">
       <h2 class="section-title">⚡ Auto-Play</h2>
@@ -103,11 +36,11 @@
       <h2 class="section-title">💾 Data</h2>
 
       <button class="data-btn" (click)="exportData()">
-        📤 Export Questions (JSON)
+        📤 Export Progress (JSON)
       </button>
 
       <label class="data-btn import-label">
-        📥 Import Questions (JSON)
+        📥 Import Progress (JSON)
         <input type="file" accept=".json" style="display:none" (change)="importData($event)" />
       </label>
 

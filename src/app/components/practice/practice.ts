@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PracticeService } from '../../services/practice.service';
 import { QuestionService } from '../../services/question.service';
-import { SpeechService } from '../../services/speech.service';
+import { AudioService } from '../../services/audio.service';
 import { RATING_LABELS, DOMINANCE_LABELS, DOMINANCE_COLORS, SessionResult } from '../../models/question.model';
 
 type Phase = 'question' | 'answer' | 'done';
@@ -18,7 +18,7 @@ type Phase = 'question' | 'answer' | 'done';
 export class PracticeComponent implements OnInit, OnDestroy {
   private ps = inject(PracticeService);
   private qs = inject(QuestionService);
-  private speech = inject(SpeechService);
+  private audio = inject(AudioService);
   private router = inject(Router);
 
   readonly ratingLabels = RATING_LABELS;
@@ -32,7 +32,7 @@ export class PracticeComponent implements OnInit, OnDestroy {
   readonly session = this.ps.session;
   readonly currentQuestion = this.ps.currentQuestion;
   readonly progress = this.ps.progress;
-  readonly isSpeaking = this.speech.isSpeaking;
+  readonly isSpeaking = this.audio.isSpeaking;
   readonly isDone = this.ps.isDone;
   readonly summary = computed(() => this.ps.getSessionSummary());
 
@@ -41,7 +41,6 @@ export class PracticeComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       return;
     }
-    // Auto-play if enabled
     const settings = this.qs.settings();
     if (settings.autoPlayQuestion && this.currentQuestion()) {
       setTimeout(() => this.playQuestion(), 300);
@@ -49,27 +48,28 @@ export class PracticeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.speech.stop();
+    this.audio.stop();
   }
 
   playQuestion(): void {
     const q = this.currentQuestion();
-    if (q) this.speech.speak(q.question, this.qs.settings());
+    if (q) this.audio.play(parseInt(q.id));
   }
 
-  playAnswer(text: string): void {
-    this.speech.speak(text, this.qs.settings());
+  playAnswer(): void {
+    const q = this.currentQuestion();
+    if (q) this.audio.play(parseInt(q.id) + 1000);
   }
 
   stopSpeaking(): void {
-    this.speech.stop();
+    this.audio.stop();
   }
 
   showAnswer(): void {
     this.phase.set('answer');
     const settings = this.qs.settings();
-    if (settings.autoPlayAnswer && this.currentQuestion()?.answers?.[0]) {
-      setTimeout(() => this.playAnswer(this.currentQuestion()!.answers[0]), 200);
+    if (settings.autoPlayAnswer && this.currentQuestion()) {
+      setTimeout(() => this.playAnswer(), 200);
     }
   }
 
@@ -78,7 +78,6 @@ export class PracticeComponent implements OnInit, OnDestroy {
     this.lastResult.set(result);
     this.showLastResult.set(true);
 
-    // Brief flash then advance
     setTimeout(() => {
       this.showLastResult.set(false);
       if (this.ps.isDone()) {
@@ -102,7 +101,7 @@ export class PracticeComponent implements OnInit, OnDestroy {
   }
 
   finishSession(): void {
-    this.speech.stop();
+    this.audio.stop();
     this.ps.endSession();
     this.router.navigate(['/']);
   }
