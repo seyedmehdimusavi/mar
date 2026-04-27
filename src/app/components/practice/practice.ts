@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, computed, inject, signal } from '@angular
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PracticeService } from '../../services/practice.service';
-import { QuestionService } from '../../services/question.service';
 import { AudioService } from '../../services/audio.service';
 import { RATING_LABELS, DOMINANCE_LABELS, DOMINANCE_COLORS, SessionResult } from '../../models/question.model';
 
@@ -17,7 +16,6 @@ type Phase = 'question' | 'answer' | 'done';
 })
 export class PracticeComponent implements OnInit, OnDestroy {
   private ps = inject(PracticeService);
-  private qs = inject(QuestionService);
   private audio = inject(AudioService);
   private router = inject(Router);
 
@@ -41,8 +39,7 @@ export class PracticeComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       return;
     }
-    const settings = this.qs.settings();
-    if (settings.autoPlayQuestion && this.currentQuestion()) {
+    if (this.currentQuestion()) {
       setTimeout(() => this.playQuestion(), 300);
     }
   }
@@ -67,10 +64,6 @@ export class PracticeComponent implements OnInit, OnDestroy {
 
   showAnswer(): void {
     this.phase.set('answer');
-    const settings = this.qs.settings();
-    if (settings.autoPlayAnswer && this.currentQuestion()) {
-      setTimeout(() => this.playAnswer(), 200);
-    }
   }
 
   submitRating(rating: number): void {
@@ -84,8 +77,7 @@ export class PracticeComponent implements OnInit, OnDestroy {
         this.phase.set('done');
       } else {
         this.phase.set('question');
-        const settings = this.qs.settings();
-        if (settings.autoPlayQuestion && this.ps.currentQuestion()) {
+        if (this.ps.currentQuestion()) {
           setTimeout(() => this.playQuestion(), 300);
         }
       }

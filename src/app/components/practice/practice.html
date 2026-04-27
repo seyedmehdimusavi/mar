@@ -68,7 +68,7 @@
               }
             </div>
 
-            <div class="q-text">{{ q.question }}</div>
+            <div class="q-text playable" (click)="playQuestion()">{{ q.question }}</div>
 
             <div class="tts-row">
               @if (!isSpeaking()) {
@@ -95,7 +95,7 @@
       @if (phase() === 'answer') {
         <div class="card-wrap">
           <div class="q-card mini">
-            <div class="q-text-small">{{ q.question }}</div>
+            <div class="q-text-small playable" (click)="playQuestion()">{{ q.question }}</div>
           </div>
 
           <div class="a-card">
@@ -105,7 +105,7 @@
             @for (ans of q.answers; track ans; let i = $index) {
               <div class="answer-item">
                 <div class="ans-num">{{ i + 1 }}</div>
-                <div class="ans-text">{{ ans }}</div>
+                <div class="ans-text playable" (click)="playAnswer()">{{ ans }}</div>
                 <button class="play-ans-btn" (click)="playAnswer()" title="Play this answer">▶</button>
               </div>
             }

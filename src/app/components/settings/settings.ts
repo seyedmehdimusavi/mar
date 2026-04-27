@@ -1,30 +1,18 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { QuestionService } from '../../services/question.service';
-import { AppSettings } from '../../models/question.model';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
 })
 export class SettingsComponent {
   private qs = inject(QuestionService);
 
-  settings = signal<AppSettings>({ ...this.qs.settings() });
   resetConfirm = signal(false);
-
-  toggleAutoPlay(field: 'autoPlayQuestion' | 'autoPlayAnswer'): void {
-    this.settings.update(s => ({ ...s, [field]: !s[field] }));
-    this.save();
-  }
-
-  save(): void {
-    this.qs.saveSettings(this.settings());
-  }
 
   resetProgress(): void {
     if (!this.resetConfirm()) {

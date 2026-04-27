@@ -8,8 +8,7 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_SETTINGS: AppSettings = {
-  autoPlayQuestion: false,
-  autoPlayAnswer: false,
+  _placeholder: false,
 };
 
 type ProgressEntry = { dominance: number; practiceCount: number; lastTried: string | null };

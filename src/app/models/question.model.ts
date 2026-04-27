@@ -14,8 +14,7 @@ export interface Category {
 }
 
 export interface AppSettings {
-  autoPlayQuestion: boolean;
-  autoPlayAnswer: boolean;
+  _placeholder: boolean; // reserved for future settings
 }
 
 export interface SessionResult {

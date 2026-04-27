@@ -117,6 +117,15 @@
   font-style: italic;
 }
 
+.playable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 0.4rem;
+  transition: background 0.12s, opacity 0.12s;
+  &:active { background: rgba(59,130,246,0.08); opacity: 0.8; }
+}
+
 .tts-row { display: flex; gap: 0.5rem; }
 
 .tts-btn {
